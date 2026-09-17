@@ -1,0 +1,544 @@
+# Scholara UI and Functionality Roadmap
+
+> **Product:** Scholara
+> **Tagline:** One platform. Every school. Its own world.
+> **Current implementation constraint:** Use browser `localStorage` for the first prototype.
+> **Target:** A usable, convincing school operations MVP that can later become a multi-tenant SaaS without throwing away the product structure.
+
+## 1. Product direction
+
+Scholara is a school management workspace for owners, administrators, teachers, bursars, parents and students. The first release should prove the core loop:
+
+1. Create and configure a school.
+2. Add students, guardians, staff, classes and subjects.
+3. Mark attendance quickly.
+4. Enter scores and calculate results.
+5. Generate a branded report card preview.
+6. Create invoices and record payments.
+7. Share announcements.
+8. Show role-specific dashboards.
+
+The first prototype is intentionally local and single-browser. It should feel like a real school environment, but it must not imply that `localStorage` is safe for production student records, payments or authentication.
+
+## 2. Scope rules for the local prototype
+
+### Build now
+
+- One demo school stored in the browser.
+- Seed data so the dashboard is never empty.
+- A school setup wizard.
+- Role-aware navigation and dashboard content.
+- Student, guardian, staff, class and subject management.
+- Attendance marking with local persistence.
+- Score entry, result computation and approval states.
+- Report card preview and print-friendly output.
+- Fee heads, invoices, payments and debtor summary.
+- Announcements and notification states.
+- School branding controls.
+- Basic AI-shaped workflows using deterministic mock results until a backend exists.
+- Export and reset controls for prototype data.
+
+### Defer
+
+- Real authentication and password storage.
+- Real payment gateways and webhook verification.
+- SMS, email, WhatsApp and push delivery.
+- Cross-device synchronization.
+- Real AI API calls and student-data processing.
+- File uploads containing personal or health information.
+- Server-side tenant isolation and PostgreSQL row-level security.
+- Super-admin actions that affect real schools.
+- Payroll, transport GPS, hostel, biometric attendance and e-learning.
+
+## 3. Experience principles
+
+- **Fast for school staff:** common actions should take one or two screens.
+- **Mobile-first for teachers and parents:** attendance and fee status must work on a phone.
+- **Dense where data matters:** tables, filters, bulk actions and clear status labels.
+- **Never lose entered work:** save forms locally as the user types or leaves a field.
+- **Clear ownership:** every screen shows the current school, session and term.
+- **AI is visibly assisted:** generated text receives an AI badge and always needs human approval.
+- **Accessible by default:** keyboard navigation, visible focus, labels, text plus colour for status, WCAG AA contrast.
+- **Configuration over custom code:** school identity, grading and fee rules are settings.
+
+## 4. UI foundation
+
+### Visual system
+
+Use the Scholara palette from the blueprint:
+
+- Midnight Indigo: `#1E1B4B` for sidebar and authority surfaces.
+- Scholara Indigo: `#4338CA` for primary actions and active navigation.
+- Indigo Wash: `#EEF2FF` for selected states and information surfaces.
+- Achievement Amber: `#F59E0B` for highlights and upgrade prompts.
+- Intelligence Teal: `#0D9488` only for AI-generated content and AI actions.
+- Slate 900: `#0F172A` for primary text.
+- Slate 600: `#475569` for secondary text.
+- Slate 200: `#E2E8F0` for borders.
+- Slate 50: `#F8FAFC` for the application background.
+- Success: `#16A34A`; warning: `#F59E0B`; danger: `#DC2626`; info: `#0284C7`.
+
+### Typography and layout
+
+- Headings and interface: Plus Jakarta Sans.
+- Body and tables: Inter.
+- Report cards: Source Serif 4 or Lora.
+- IDs and admission numbers: JetBrains Mono.
+- Desktop shell: collapsible Midnight Indigo sidebar plus top bar.
+- Mobile shell: top bar plus bottom navigation for the most-used areas.
+- Content background: Slate 50 with white data surfaces.
+- Default spacing: 4, 8, 12, 16, 24, 32, 48 and 64 px.
+- Inputs and buttons: 6 px radius.
+- Cards: 12 px radius.
+- Modals: 16 px radius.
+- Motion: 150 ms micro-interactions and 250 ms panels; respect reduced motion.
+
+### Shared components
+
+Build these before module-specific screens:
+
+- App shell.
+- Sidebar and mobile navigation.
+- Top bar with school switcher, session/term switcher, search, notifications and user menu.
+- Breadcrumbs and page headers.
+- Buttons: primary, secondary, ghost and danger.
+- Inputs, selects, comboboxes, date pickers and textareas.
+- Data table with sorting, filtering, pagination, row selection and bulk actions.
+- Status badge, avatar, empty state, loading skeleton and toast.
+- Stat card, chart container and progress bar.
+- Drawer, modal and type-to-confirm dialog.
+- Stepper for onboarding.
+- Tabs and segmented controls.
+- Print layout wrapper.
+- AI badge, AI generation panel and approval controls.
+- Command palette for power users.
+
+## 5. Information architecture
+
+### Public and onboarding
+
+- `/` - marketing landing page.
+- `/pricing` - transparent plan comparison and billing cycle switcher.
+- `/register` - owner registration and school slug availability.
+- `/setup` - resumable setup wizard.
+- `/login` - prototype role selection; real credentials later.
+
+### School application
+
+- `/dashboard` - role-specific overview.
+- `/students` - student directory, import and bulk actions.
+- `/students/:id` - profile, timeline, enrolment and guardian records.
+- `/staff` - staff directory, roles and assignments.
+- `/academics` - sessions, terms, class levels, arms and subjects.
+- `/attendance` - fast class attendance marking and summaries.
+- `/results` - score entry, computation, approval and publishing states.
+- `/report-cards` - preview, print and export report cards.
+- `/finance` - fee heads, invoices, payments, debtors and receipts.
+- `/communications` - announcements, templates and delivery history.
+- `/ai-studio` - report comments and lesson plan generation.
+- `/reports` - operational and academic summaries.
+- `/settings` - school profile, branding, academic rules, finance rules and modules.
+
+### Platform administration, later
+
+- `/admin/overview` - network metrics.
+- `/admin/schools` - tenant CRUD and health.
+- `/admin/billing` - plans, invoices, usage and dunning.
+- `/admin/support` - tickets and tenant notes.
+- `/admin/flags` - feature flags.
+- `/admin/audit` - platform audit log.
+
+## 6. Role-based UI
+
+The prototype should expose a role switcher for demonstration, but the navigation and visible actions must still reflect the selected role.
+
+| Role | Primary UI | First actions |
+|---|---|---|
+| Owner | Dashboard, finance, reports, settings | Review revenue, enrolment and outstanding fees |
+| Principal | Dashboard, attendance, results, staff | Review attendance and approve results |
+| School admin | Students, staff, academics, communications | Maintain records and school setup |
+| Bursar | Finance, invoices, payments, debtors | Record payment and follow up debt |
+| Teacher | Today, attendance, results, AI studio | Mark a class and enter scores |
+| Parent | Child dashboard, results, attendance, fees | Check progress and view fee balance |
+| Student | Timetable, assignments, results | View work and results |
+
+Permission names should already follow the future server model, for example `students.read`, `students.create`, `attendance.mark`, `results.enter`, `results.approve`, `results.publish` and `fees.invoice.create`.
+
+## 7. Core UI journeys
+
+### Journey A: First-time school setup
+
+**Screens:** Register -> provisioning -> setup wizard -> dashboard.
+
+**Wizard steps:**
+
+1. School identity: name, slug, logo placeholder and primary colour.
+2. Academic calendar: session, terms, current term and school hours.
+3. Structure: class levels, arms and subjects.
+4. Assessment: components, weightings, grade boundaries and pass mark.
+5. Team: invite or create staff records.
+
+**Success state:** a completion ring shows setup progress and the dashboard includes a clear next action. Seed three sample students and one class so the user can see the product immediately.
+
+### Journey B: Add students
+
+**Screens:** Student directory -> add student drawer -> student profile.
+
+**Requirements:**
+
+- Search by name, admission number, class or guardian.
+- Filter by status, class and session.
+- Add student and primary guardian together.
+- Auto-generate admission number from a configurable school format.
+- Support CSV import with column mapping, validation preview and duplicate warnings.
+- Use soft-delete/archive states rather than destructive deletion.
+- Show an activity timeline on the student profile.
+
+### Journey C: Mark attendance
+
+**Screens:** Attendance landing -> class register -> attendance summary.
+
+**Requirements:**
+
+- Select date, session, term, class and period.
+- Default all students to present.
+- Tap only exceptions: absent, late, excused or sick bay.
+- Show a saved indicator for every update.
+- Save an offline queue in local storage.
+- Display class attendance percentage and absence count.
+- Keep parent notification as a preview action until messaging is connected.
+
+### Journey D: Enter and approve results
+
+**Screens:** Results overview -> score grid -> review -> approval -> report card.
+
+**Requirements:**
+
+- Select class, subject, term and assessment component.
+- Spreadsheet-like score grid with keyboard navigation.
+- Validate values against maximum marks.
+- Autosave each changed score locally.
+- Compute weighted totals, grade, average and position.
+- Keep raw component scores as the source of truth.
+- Status flow: draft -> submitted -> reviewed -> approved -> published.
+- Prevent parent view until approved/published.
+- Include a report card preview with school branding, attendance, remarks and grade key.
+
+### Journey E: Manage fees
+
+**Screens:** Finance overview -> fee structure -> bulk invoice -> invoice detail -> record payment -> debtor report.
+
+**Requirements:**
+
+- Configure fee heads by class and term.
+- Generate invoices in bulk with a unique reference.
+- Record full or part payment.
+- Calculate balance and payment status.
+- Filter debtors by class, age and amount.
+- Generate a printable receipt.
+- Make online payment a disabled or mock flow until a verified gateway exists.
+
+### Journey F: Communicate
+
+**Screens:** Announcements -> compose -> audience selection -> preview -> history.
+
+**Requirements:**
+
+- Target the whole school, class, staff or parents of debtors.
+- Support draft, scheduled-preview and sent-preview states.
+- Provide merge fields such as parent name and student name.
+- Store delivery history locally.
+- Clearly label email/SMS/WhatsApp as simulated until integrations exist.
+
+### Journey G: AI-assisted work
+
+**Screens:** AI Studio -> feature form -> generated draft -> edit and approve.
+
+**MVP features:**
+
+1. **Report card comments:** choose a student or class, generate a comment from mock scores and attendance, edit it, approve it and attach it to the report card.
+2. **Lesson plan generator:** choose subject, class, topic and duration, generate structured objectives, materials, steps, evaluation and homework.
+
+**Rules:**
+
+- Use the teal AI colour and an explicit `AI draft` badge.
+- Never auto-publish generated content.
+- Store prompt summary, generated output, approval status and editor in the local data model.
+- Keep student names out of prompts where identity is not needed.
+- Add an AI off toggle in settings.
+
+## 8. Dashboard roadmap
+
+### Owner dashboard
+
+- Revenue collected versus expected.
+- Active students and enrolment trend.
+- Outstanding fees and collection rate.
+- Staff count and setup completion.
+- Recent activity and pending approvals.
+
+### Principal dashboard
+
+- Attendance today.
+- Results submission progress by class.
+- Subject performance summary.
+- Recent incidents and announcements.
+- Approvals requiring attention.
+
+### Teacher dashboard
+
+- Today's classes.
+- Attendance registers to complete.
+- Score entry deadlines.
+- Assignments and lesson plans.
+- Quick actions: mark attendance, enter scores, generate comment.
+
+### Parent dashboard
+
+- Child switcher.
+- Attendance this term.
+- Latest published result.
+- Fee balance and payment preview.
+- Announcements.
+
+## 9. Local storage architecture
+
+Use a versioned, namespaced document rather than unrelated keys scattered through components.
+
+### Suggested keys
+
+```text
+scholara:data:v1
+scholara:settings:v1
+scholara:session:v1
+scholara:ui:v1
+scholara:outbox:v1
+```
+
+### Data shape
+
+```ts
+interface LocalScholaraState {
+  version: 1;
+  tenant: Tenant;
+  users: User[];
+  roles: Role[];
+  sessions: AcademicSession[];
+  terms: Term[];
+  classLevels: ClassLevel[];
+  classArms: ClassArm[];
+  subjects: Subject[];
+  students: Student[];
+  guardians: Guardian[];
+  staff: Staff[];
+  enrolments: StudentEnrolment[];
+  attendance: AttendanceRecord[];
+  assessmentComponents: AssessmentComponent[];
+  gradeScales: GradeScale[];
+  scores: Score[];
+  results: Result[];
+  reportCards: ReportCard[];
+  feeHeads: FeeHead[];
+  feeStructures: FeeStructure[];
+  invoices: Invoice[];
+  payments: Payment[];
+  announcements: Announcement[];
+  notifications: Notification[];
+  aiGenerations: AiGeneration[];
+  auditEvents: AuditEvent[];
+  updatedAt: string;
+}
+```
+
+### Persistence rules
+
+- Read the state once at app startup.
+- Validate and migrate the stored version before use.
+- Write through one repository/store service, not directly from page components.
+- Debounce non-critical writes, but flush immediately after score, attendance and payment changes.
+- Generate IDs with a collision-resistant helper; do not rely on array indexes.
+- Record `createdAt`, `updatedAt` and `deletedAt` on entities that need history.
+- Keep an outbox for future sync operations: `create`, `update`, `delete`, entity type, entity ID, payload and timestamp.
+- Add `Export data` as JSON and `Reset demo data` behind a confirmation dialog.
+- If storage is full or malformed, show a recovery screen and offer JSON export/reset.
+
+### Local-only limitations
+
+`localStorage` is synchronous, size-limited, browser-scoped and readable by any script running on the page. It is not suitable for real child records, authentication secrets, health records, payment data or multi-user collaboration. Before pilot use, move persistence to a backend with encrypted storage, signed file URLs, audit logs, tenant scoping and PostgreSQL row-level security. Use IndexedDB instead of `localStorage` when the prototype needs larger imports or reliable offline queues.
+
+## 10. Functionality roadmap
+
+### Phase 0: Product foundation
+
+**Outcome:** a coherent shell and data foundation.
+
+- Define TypeScript domain types and status enums.
+- Create the versioned local store and seed data.
+- Add migration, export and reset functions.
+- Build design tokens and shared components.
+- Build responsive app shell, role switcher and session/term switcher.
+- Add toast, empty, loading, error and confirmation states.
+- Add a lightweight local audit event for every important mutation.
+
+**Exit criteria:** refreshing the browser preserves data; reset restores a clean demo; changing role changes navigation and dashboard content.
+
+### Phase 1: MVP school operations
+
+**Outcome:** one school can operate a complete academic and fee cycle in the browser.
+
+- School setup wizard and branding.
+- Students, guardians, staff and academic structure.
+- Attendance register and summaries.
+- Assessment configuration, score entry and result calculation.
+- Approval workflow and report card print preview.
+- Fee heads, invoice generation, payment recording, receipts and debtors.
+- Announcements and notification previews.
+- Owner, principal, admin, bursar, teacher and parent dashboards.
+- CSV import/export for students.
+- Responsive layouts for desktop and mobile.
+
+**Exit criteria:** a seeded school can add a student, mark attendance, enter scores, approve a result, produce a report card and record a payment without losing data after refresh.
+
+### Phase 2: Demo-grade differentiation
+
+**Outcome:** the product demonstrates why Scholara is more than a records table.
+
+- AI report card comment workflow with approval.
+- AI lesson plan workflow with structured output.
+- Student timeline across attendance, results and payments.
+- Saved filters and bulk actions.
+- Better report cards for nursery, primary and secondary variants.
+- Parent child switcher and fee/result views.
+- Setup completion analytics.
+- Local notification centre and activity feed.
+- Mock subscription plans and feature entitlements.
+
+**Exit criteria:** an owner can see the value proposition in a ten-minute demo using realistic seeded data.
+
+### Phase 3: Pilot readiness
+
+**Outcome:** safe for a small controlled pilot with non-sensitive or test data.
+
+- Replace role switcher with real backend authentication.
+- Move tenant, user and school data to a backend database.
+- Add server-side authorization and tenant resolution.
+- Add PostgreSQL row-level security and cross-tenant isolation tests.
+- Add real object storage with signed URLs.
+- Add one payment gateway with verified webhooks.
+- Add email/SMS provider adapters and delivery logs.
+- Add background jobs for imports, PDFs, notifications and AI batches.
+- Add backups, restore drills, error tracking and audit log persistence.
+- Add privacy, consent, retention and data export workflows.
+
+**Exit criteria:** two test schools can use the system concurrently without shared data, and the team can restore one school's data independently.
+
+### Phase 4: Commercial MVP
+
+**Outcome:** a sellable multi-tenant SaaS.
+
+- Subdomain tenant routing and custom domains.
+- Plans, trials, entitlements, limits, dunning and invoices.
+- Separate super-admin console with mandatory 2FA.
+- Tenant suspension, restore and time-limited impersonation.
+- Parent and teacher PWA features with offline attendance.
+- Real PDF generation in a queue worker.
+- Support inbox, help documentation and product analytics.
+- Feature flags and per-tenant AI kill switch.
+- Usage metering for SMS, storage and AI credits.
+
+### Phase 5: Scale
+
+**Outcome:** platform expansion after stable pilot economics.
+
+- Timetable, assignments, admissions and CBT.
+- Library, transport, health, discipline, HR and payroll.
+- Parent and teacher native apps.
+- Public API and webhooks.
+- Multi-branch reporting.
+- Advanced analytics and custom report builder.
+- Enterprise SSO, data residency and dedicated database option.
+- Multi-language and multi-currency support.
+
+## 11. Recommended delivery order by screen
+
+1. App shell and dashboard with seeded data.
+2. Students table and student profile.
+3. School setup wizard.
+4. Attendance register.
+5. Results score grid.
+6. Report card preview.
+7. Finance overview and invoice detail.
+8. Payment recording and receipt.
+9. Announcements.
+10. Settings and branding.
+11. AI Studio.
+12. Parent and teacher role views.
+13. Mock billing and entitlements.
+14. Super-admin prototype.
+
+This order creates visible value early and validates the highest-risk workflows before the later modules expand the surface area.
+
+## 12. Definition of done for every screen
+
+- Has loading, empty, error and success states.
+- Works at mobile and desktop widths.
+- Uses shared components and design tokens.
+- Persists meaningful changes locally.
+- Has keyboard and focus support.
+- Uses status text as well as colour.
+- Includes a clear primary action.
+- Protects destructive actions with confirmation.
+- Shows the current school, role, session and term where relevant.
+- Does not claim that simulated integrations actually sent, charged or published anything.
+
+## 13. Product metrics to instrument early
+
+Even in the local prototype, structure events so a backend can receive them later:
+
+- `setup_started`, `setup_completed`
+- `student_created`, `student_imported`
+- `attendance_register_completed`
+- `score_entry_started`, `scores_submitted`
+- `result_approved`, `report_card_generated`
+- `invoice_created`, `payment_recorded`
+- `announcement_drafted`
+- `ai_generation_created`, `ai_generation_approved`
+- `first_value_reached`
+
+The main activation event is **first branded report card generated**. A secondary activation event is **first attendance register completed**.
+
+## 14. Immediate build checklist
+
+- [ ] Create the app shell and route map.
+- [ ] Define domain types and seeded demo data.
+- [ ] Implement `scholara:data:v1` repository with migration support.
+- [ ] Add role-aware navigation.
+- [ ] Build dashboard cards and activity feed.
+- [ ] Build students directory and profile.
+- [ ] Build setup wizard.
+- [ ] Build attendance register with autosave.
+- [ ] Build results grid and calculation service.
+- [ ] Build report card preview and print styles.
+- [ ] Build finance and payment recording.
+- [ ] Build communications preview.
+- [ ] Build branding settings.
+- [ ] Add export, reset and recovery flows.
+- [ ] Add AI Studio mock workflows.
+- [ ] Test refresh persistence and mobile layouts.
+
+## 15. Guardrails before real data
+
+Do not use the local prototype for real children's records or real payment credentials. Before onboarding a school, implement:
+
+- Server-side authentication and role checks.
+- Tenant resolution on every request.
+- PostgreSQL row-level security.
+- Encrypted database and object storage.
+- Signed short-lived file URLs.
+- Audit logs and admin action logs.
+- Consent, retention, export and deletion workflows.
+- Verified payment webhooks.
+- Backups and restore testing.
+- AI tenant filtering, usage metering and human approval.
+
+The local prototype is a fast product laboratory. Its job is to validate the workflows, vocabulary and information architecture so the later SaaS build is deliberate rather than speculative.
