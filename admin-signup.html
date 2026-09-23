@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edu-mit | Create Admin account</title>
+  <link rel="stylesheet" href="admin-signup.css">
+</head>
+<body>
+  <main class="signup-shell">
+    <section class="signup-story">
+      <a class="brand" href="login.html"><img src="logo.svg" alt="Edu-mit logo"><strong>Edu-mit</strong></a>
+      <div class="story-copy">
+        <p class="kicker">Admin setup</p>
+        <h1>Set the school<br><em>in motion.</em></h1>
+        <p>Create the account that will manage your school, invite staff and keep every record moving in one place.</p>
+        <div class="story-list">
+          <div><span>01</span><strong>Build your workspace</strong><small>Start with your school identity and current term.</small></div>
+          <div><span>02</span><strong>Bring in your team</strong><small>Invite teachers and staff when your workspace is ready.</small></div>
+          <div><span>03</span><strong>See the whole school</strong><small>Stay close to attendance, results and fees.</small></div>
+        </div>
+      </div>
+      <p class="story-foot">Already have an account? <a href="login.html">Return to role selection</a></p>
+    </section>
+    <section class="form-side">
+      <div class="form-card">
+        <div class="form-header"><span class="admin-mark">◆</span><p class="kicker">Admin account</p><h2>Create your account</h2><p>Use your details to start a local Edu-mit workspace.</p></div>
+        <form id="adminSignupForm" novalidate>
+          <div class="form-grid">
+            <label>Full name<input name="name" autocomplete="name" placeholder="Amara Okafor" required></label>
+            <label>School name<input name="school" autocomplete="organization" placeholder="" required></label>
+            <label class="full">Work email<input name="email" type="email" autocomplete="email" placeholder="you@school.edu" required></label>
+            <label>Password<input name="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" required></label>
+            <label>Confirm password<input name="confirmPassword" type="password" autocomplete="new-password" placeholder="Repeat your password" minlength="8" required></label>
+          </div>
+          <label class="terms"><input name="terms" type="checkbox" required><span>I agree to create a local demo workspace for this school.</span></label>
+          <p class="form-error" id="formError" role="alert"></p>
+          <button class="submit-button" type="submit">Create Admin account <span>→</span></button>
+        </form>
+        <p class="demo-note"><span>◌</span> This prototype stores account details only in this browser.</p>
+      </div>
+    </section>
+  </main>
+  <script src="tenant-store.js"></script>
+  <script src="admin-signup.js"></script>
+</body>
+</html>

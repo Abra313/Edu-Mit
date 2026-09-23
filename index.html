@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1e1b4b" />
+    <title>Edu-mit | School workspace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand-lockup">
+          <div class="brand-mark"><img src="logo.svg" alt="Edu-mit logo" /></div>
+          <div><strong>Edu-mit</strong><span></span></div>
+        </div>
+        <div class="term-picker"><span>Current term</span><select id="termSwitcher" aria-label="Switch academic term"><option>2026/27 · Term 1</option><option>2026/27 · Term 2</option><option>2026/27 · Term 3</option></select></div>
+        <nav class="nav-list" aria-label="Main navigation">
+          <button class="nav-item active" data-view="dashboard"><span class="nav-icon">⌂</span>Overview</button>
+          <button class="nav-item" data-view="setup"><span class="nav-icon">✓</span>Setup <span class="nav-count">72%</span></button>
+          <button class="nav-item" data-view="students"><span class="nav-icon">♧</span>Students <span class="nav-count">248</span></button>
+          <button class="nav-item" data-view="staff"><span class="nav-icon">♙</span>Staff</button>
+          <button class="nav-item" data-view="academics"><span class="nav-icon">▤</span>Academics</button>
+          <button class="nav-item" data-view="attendance"><span class="nav-icon">◷</span>Attendance</button>
+          <button class="nav-item" data-view="results"><span class="nav-icon">▦</span>Results</button>
+          <button class="nav-item" data-view="report-cards"><span class="nav-icon">▧</span>Report cards</button>
+          <button class="nav-item" data-view="finance"><span class="nav-icon">₦</span>Finance <span class="nav-dot"></span></button>
+          <button class="nav-item" data-view="communications"><span class="nav-icon">✦</span>Communications</button>
+          <button class="nav-item" data-view="reports"><span class="nav-icon">◒</span>Reports</button>
+          <div class="nav-label">Workspace</div>
+          <button class="nav-item" data-view="ai"><span class="nav-icon ai-icon">✧</span>AI studio <span class="new-pill">NEW</span></button>
+          <button class="nav-item" data-view="settings"><span class="nav-icon">⚙</span>Settings</button>
+          <div class="nav-label">Platform administration</div>
+          <button class="nav-item" data-view="admin-overview"><span class="nav-icon">⌁</span>Admin overview</button>
+          <button class="nav-item" data-view="admin-schools"><span class="nav-icon">◫</span>Schools</button>
+          <button class="nav-item" data-view="admin-billing"><span class="nav-icon">₦</span>Billing</button>
+          <button class="nav-item" data-view="admin-support"><span class="nav-icon">✦</span>Support</button>
+          <button class="nav-item" data-view="admin-flags"><span class="nav-icon">⚑</span>Feature flags</button>
+          <button class="nav-item" data-view="admin-audit"><span class="nav-icon">▤</span>Audit log</button>
+        </nav>
+        <div class="sidebar-footer">
+          <div class="storage-label"><span>Prototype storage</span><strong id="storageStatus">Local</strong></div>
+          <div class="storage-bar"><span></span></div>
+          <button class="sidebar-help" id="helpButton"><span>?</span> Need a hand?</button>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <button class="mobile-menu" id="mobileMenu" aria-label="Open menu">☰</button>
+          <div class="breadcrumbs"><button class="school-switcher" id="schoolSwitcher"> <span>⌄</span></button><b>/</b><span id="workspaceContext">2026/27 · Term 1</span><b>/</b><strong id="breadcrumb">Overview</strong></div>
+          <div class="topbar-actions">
+            <button class="icon-button search-button" id="searchButton" aria-label="Search">⌕<span>Search anything</span><kbd>⌘ K</kbd></button>
+            <button class="icon-button" aria-label="Notifications" id="notificationButton">♢<i></i></button>
+            <div class="user-menu"><div class="avatar">AO</div><div><strong>Amara Okafor</strong><span id="roleLabel">School owner</span></div><select id="roleSwitcher" aria-label="Switch prototype role"><option value="School owner">Owner</option><option value="Principal">Principal</option><option value="School admin">Admin</option><option value="Bursar">Bursar</option><option value="Teacher">Teacher</option><option value="Parent">Parent</option><option value="Student">Student</option></select><button class="user-logout" data-action="logout">Sign out</button></div>
+          </div>
+        </header>
+
+        <div class="page-content" id="pageContent"></div>
+      </main>
+    </div>
+
+    <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+      <button class="mobile-nav-item active" data-view="dashboard"><span>⌂</span>Home</button>
+      <button class="mobile-nav-item" data-view="students"><span>♧</span>Students</button>
+      <button class="mobile-nav-item" data-view="attendance"><span>◷</span>Attend</button>
+      <button class="mobile-nav-item" data-view="finance"><span>₦</span>Fees</button>
+      <button class="mobile-nav-item" data-view="settings"><span>⚙</span>More</button>
+    </nav>
+
+    <div class="toast" id="toast" role="status"></div>
+    <div class="notification-panel" id="notificationPanel" hidden>
+      <div class="notification-panel-header"><div><strong>Notifications</strong><span>Updates that need your attention</span></div><button id="markNotificationsRead">Mark all read</button></div>
+      <div id="notificationItems"></div>
+    </div>
+    <div class="command-backdrop" id="commandBackdrop" hidden>
+      <section class="command-palette" role="dialog" aria-modal="true" aria-labelledby="commandTitle">
+        <div class="command-search"><span>⌕</span><input id="commandInput" autocomplete="off" placeholder="Search students, staff, invoices..." /><kbd>ESC</kbd></div>
+        <h2 id="commandTitle">Quick navigation</h2>
+        <div class="command-results" id="commandResults"></div>
+      </section>
+    </div>
+    <div class="modal-backdrop" id="modalBackdrop" hidden>
+      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <button class="modal-close" id="modalClose" aria-label="Close dialog">×</button>
+        <h2 id="modalTitle">Add student</h2>
+        <p id="modalDescription">Create a student record. It will be saved in this browser.</p>
+        <form id="studentForm">
+          <div class="form-grid">
+            <label>First name<input name="firstName" required placeholder="e.g. Maya" /></label>
+            <label>Last name<input name="lastName" required placeholder="e.g. Adeyemi" /></label>
+            <label>Class<select name="className"><option>JSS 2A</option><option>Primary 5</option><option>SS 1B</option><option>Primary 3</option></select></label>
+            <label>Guardian<input name="guardian" required placeholder="Guardian name" /></label>
+          </div>
+          <div class="modal-actions"><button type="button" class="button ghost" id="modalCancel">Cancel</button><button class="button primary" type="submit">Save student</button></div>
+        </form>
+      </section>
+    </div>
+
+    <div class="modal-backdrop" id="confirmBackdrop" hidden>
+      <section class="modal confirm-modal" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmDescription">
+        <button class="modal-close" data-confirm-close aria-label="Close dialog">×</button>
+        <h2 id="confirmTitle">Confirm action</h2>
+        <p id="confirmDescription" style="margin-bottom:0">This action cannot be undone.</p>
+        <div class="confirm-required">
+          To continue, type <code id="confirmPhrase">RESET</code> below:
+          <input id="confirmInput" autocomplete="off" spellcheck="false" placeholder="Type the confirmation phrase..." />
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="button ghost" data-confirm-close>Cancel</button>
+          <button class="button danger" id="confirmSubmit" disabled>Confirm destructive action</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="drawer-backdrop" id="drawerBackdrop" hidden>
+      <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+        <div class="drawer-header">
+          <div>
+            <h2 id="drawerTitle">Record payment</h2>
+            <p id="drawerDescription">Apply a payment to an invoice and update the balance locally.</p>
+          </div>
+          <button class="drawer-close" id="drawerClose" aria-label="Close drawer">×</button>
+        </div>
+        <form id="paymentForm">
+          <div class="form-grid" style="grid-template-columns:1fr">
+            <label>Invoice
+              <div class="combobox" id="invoiceCombobox">
+                <input id="invoiceComboboxInput" placeholder="Start typing an invoice or student…" autocomplete="off" />
+                <div class="combobox-suggestions" id="invoiceComboboxSuggestions" hidden></div>
+              </div>
+            </label>
+            <label>Payment date
+              <div class="date-picker-wrap">
+                <input id="paymentDateInput" placeholder="e.g. 2026-09-17" readonly />
+                <button type="button" class="button secondary" id="paymentDatePicker" style="margin-top:7px;padding:8px 10px">📅 Pick date</button>
+                <div class="date-picker-pop" id="paymentDatePop" hidden></div>
+              </div>
+            </label>
+            <label>Amount (₦)<input id="paymentAmount" type="number" min="0" step="500" placeholder="0" /></label>
+            <label>Method
+              <select id="paymentMethod">
+                <option>Bank transfer</option><option>Cash</option><option>Card</option><option>Cheque</option><option>POS</option>
+              </select>
+            </label>
+            <label>Notes or reference<textarea id="paymentNotes" rows="3" placeholder="Optional receipt number, bank teller, or note to the family…"></textarea></label>
+          </div>
+          <div class="drawer-actions">
+            <button type="button" class="button ghost" id="drawerCancel">Cancel</button>
+            <button type="submit" class="button primary">Record payment</button>
+          </div>
+        </form>
+      </aside>
+    </div>
+    <script src="app.js"></script>
+  </body>
+</html>

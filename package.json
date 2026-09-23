@@ -1,0 +1,9 @@
+{
+  "name": "scholara-prototype",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A dependency-free local prototype for the Scholara school management workspace.",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}

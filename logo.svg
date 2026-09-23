@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 96" role="img" aria-labelledby="title desc">
+  <title id="title">Edu-mit graduation cap</title>
+  <desc id="desc">A dark graduation cap logo</desc>
+  <path fill="#101820" d="M8 30 64 8l56 22-56 23L8 30Zm17 9 39 16 39-16v23c0 8-17 19-39 19S25 70 25 62V39Z"/>
+  <path fill="#101820" d="M102 34h5v35h-5zM99 69h11l-3 18h-5l-3-18Z"/>
+  <circle cx="104.5" cy="69" r="5.5" fill="#101820"/>
+</svg>

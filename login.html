@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edu-mit | Choose your role</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+  <main class="login-shell">
+    <section class="login-intro">
+      <div class="brand"><img src="logo.svg" alt="Edu-mit logo"><strong>Edu-mit</strong></div>
+      <p class="kicker"></p>
+      <h1>One school day.<br><em>Three clear views.</em></h1>
+      <p class="intro-copy">Choose the workspace that matches your role. Each view keeps the next useful action close at hand.</p>
+      <div class="intro-note"><span>●</span><div><strong>2026/27 · Term 1</strong><small>Local demo workspace</small></div></div>
+    </section>
+    <section class="role-panel" aria-labelledby="role-title">
+      <p class="kicker">Sign in to continue</p>
+      <h2 id="role-title">Where are you headed?</h2>
+      <p class="muted">Select a role to open its dashboard.</p>
+      <div class="role-grid">
+        <a class="role-card admin" href="#admin-login"><span class="role-icon">◆</span><strong>Admin</strong><small>Run the school, people and records.</small><b>Sign in as Admin <i>↗</i></b></a>
+        <a class="role-card teacher" href="#teacher-login"><span class="role-icon">✎</span><strong>Teacher</strong><small>Teach classes, attendance and results.</small><b>Sign in as Teacher <i>↗</i></b></a>
+        <a class="role-card student" href="#student-login"><span class="role-icon">◉</span><strong>Student</strong><small>Follow your learning day and progress.</small><b>Sign in as Student <i>↗</i></b></a>
+      </div>
+      <form class="admin-login-form" id="adminLoginForm" hidden>
+        <div class="login-form-heading"><div><p class="kicker">Admin sign in</p><h3>Welcome back</h3><p class="muted">Use the email and password from your Admin account.</p></div><button type="button" class="close-login" id="closeAdminLogin" aria-label="Close Admin sign in">×</button></div>
+        <label>Email address<input name="email" type="email" autocomplete="email" placeholder="you@school.edu" required></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" placeholder="Your password" required></label>
+        <p class="login-error" id="adminLoginError" role="alert"></p>
+        <button class="login-submit" type="submit">Open Admin dashboard <span>→</span></button>
+      </form>
+      <form class="role-login-form teacher-login-form" id="teacherLoginForm" hidden>
+        <div class="login-form-heading"><div><p class="kicker">Teacher sign in</p><h3>Welcome back</h3><p class="muted">Use your school email and password.</p></div><button type="button" class="close-login" data-close-login="teacher" aria-label="Close Teacher sign in">×</button></div>
+        <label>Email address<input name="email" type="email" autocomplete="email" placeholder="david.eze@greenfield.edu" required></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" placeholder="Your password" required></label>
+        <p class="login-error" id="teacherLoginError" role="alert"></p>
+        <button class="login-submit" type="submit">Open Teacher dashboard <span>→</span></button>
+      </form>
+      <form class="role-login-form student-login-form" id="studentLoginForm" hidden>
+        <div class="login-form-heading"><div><p class="kicker">Student sign in</p><h3>Find your school day</h3><p class="muted">Enter the admission number given to you by your school.</p></div><button type="button" class="close-login" data-close-login="student" aria-label="Close Student sign in">×</button></div>
+        <label>Admission number<input name="admissionNo" autocomplete="username" placeholder="GFA/2026/0147" required></label>
+        <p class="login-error" id="studentLoginError" role="alert"></p>
+        <button class="login-submit" type="submit">Open Student dashboard <span>→</span></button>
+      </form>
+      <div class="signup-prompt"><span>New school administrator?</span><a href="admin-signup.html">Create an Admin account <i>↗</i></a></div>
+      <p class="platform-link"><a href="super-admin.html">Platform Super Admin ↗</a></p>
+      <p class="security-note"><span>◌</span> Demo mode stores changes only in this browser.</p>
+    </section>
+  </main>
+  <script src="tenant-store.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>
