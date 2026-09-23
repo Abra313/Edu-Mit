@@ -554,7 +554,7 @@ function renderSettings() {
 }
 
 function bindViewActions() {
-  document.querySelectorAll('[data-view]').forEach(element => element.addEventListener('click', () => { currentView = element.dataset.view; window.history.replaceState({}, '', `#${currentView}`); document.getElementById('sidebar').classList.remove('open'); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }));
+  document.querySelectorAll('[data-view]').forEach(element => element.addEventListener('click', () => { currentView = element.dataset.view; window.history.replaceState({}, '', `#${currentView}`); closeSidebar(); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }));
   document.querySelectorAll('[data-href]').forEach(element => element.addEventListener('click', () => { window.location.href = element.dataset.href; }));
   document.querySelectorAll('[data-role-login]').forEach(element => element.addEventListener('click', () => { state.currentUser.role = element.dataset.roleLogin; saveSession(state.currentUser.role); currentView = 'dashboard'; window.history.replaceState({}, '', '#dashboard'); saveState(`Signed in locally as ${state.currentUser.role}`); render(); }));
   const registerForm = document.getElementById('registerForm');
@@ -652,7 +652,23 @@ document.getElementById('modalClose').addEventListener('click', closeModal);
 document.getElementById('modalCancel').addEventListener('click', closeModal);
 document.getElementById('modalBackdrop').addEventListener('click', event => { if (event.target.id === 'modalBackdrop') closeModal(); });
 window.addEventListener('hashchange', () => { parseHash(); render(); });
-document.getElementById('mobileMenu').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('open'));
+function setSidebarOpen(isOpen) {
+  const sidebar = document.getElementById('sidebar');
+  const menuButton = document.getElementById('mobileMenu');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  sidebar.classList.toggle('open', isOpen);
+  menuButton.setAttribute('aria-expanded', String(isOpen));
+  menuButton.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+  backdrop.classList.toggle('open', isOpen);
+}
+
+function closeSidebar() {
+  setSidebarOpen(false);
+}
+
+document.getElementById('mobileMenu').addEventListener('click', () => setSidebarOpen(!document.getElementById('sidebar').classList.contains('open')));
+document.getElementById('sidebarBackdrop').addEventListener('click', closeSidebar);
+document.addEventListener('keydown', event => { if (event.key === 'Escape') closeSidebar(); });
 document.getElementById('helpButton').addEventListener('click', () => showToast('Support centre will be connected in the next phase'));
 document.getElementById('termSwitcher').addEventListener('change', event => { const [, term] = event.target.value.split(' · '); state.tenant.currentTerm = term; saveState(`Switched to ${term}`); render(); });
 document.getElementById('schoolSwitcher').addEventListener('click', () => showToast('This local prototype contains one school: '));
