@@ -1,6 +1,17 @@
 const STORAGE_KEY = 'scholara:data:v1';
 const SESSION_KEY = 'scholara:session:v1';
 
+function registeredSchoolName(tenant) {
+  try {
+    const session = JSON.parse(sessionStorage.getItem('edumit:session:v1') || localStorage.getItem('edumit:session:v1') || 'null');
+    const settings = JSON.parse(localStorage.getItem('edumit:school-settings:v1') || '{}');
+    const account = JSON.parse(localStorage.getItem('scholara:admin-account:v1') || 'null');
+    return tenant.name || (session?.schoolId && settings[session.schoolId]?.schoolName) || account?.school || 'EDU-MIT';
+  } catch (error) {
+    return tenant.name || 'EDU-MIT';
+  }
+}
+
 const seedState = {
   version: 1,
   tenant: { name: '', slug: 'greenfield', logoUrl: '', brandPrimary: '#4338CA', country: 'Nigeria', currency: 'NGN', currentSession: '2026/27', currentTerm: 'Term 1', setupProgress: 72 },
@@ -131,6 +142,15 @@ function formatMoney(value) {
   return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN', maximumFractionDigits: 0 }).format(value);
 }
 
+function timeContext() {
+  const date = new Date();
+  const hour = date.getHours();
+  return {
+    greeting: hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening',
+    date: new Intl.DateTimeFormat(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(date)
+  };
+}
+
 function escapeHtml(value) {
   return String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
 }
@@ -164,8 +184,9 @@ function render() {
     content.innerHTML = renderer();
     postRenderBindings();
   }
-  document.querySelectorAll('.brand-mark').forEach(mark => { mark.innerHTML = '<img src="logo.svg" alt="Edu-mit logo">'; });
-  document.querySelectorAll('.brand-lockup strong, .auth-brand strong').forEach(name => { name.textContent = 'Edu-mit'; });
+  const schoolName = registeredSchoolName(state.tenant);
+  document.querySelectorAll('.brand-mark').forEach(mark => { mark.innerHTML = '<img src="logo.svg" alt="School logo">'; });
+  document.querySelectorAll('.brand-lockup strong, .auth-brand strong').forEach(name => { name.textContent = schoolName; });
   document.body.classList.toggle('public-mode', ['landing', 'pricing', 'register', 'login'].includes(currentView));
   const crumbMap = { ai: 'AI Studio', 'student-detail': 'Students / Profile', 'admin-overview': 'Admin / Overview', 'admin-schools': 'Admin / Schools', 'admin-billing': 'Admin / Billing', 'admin-support': 'Admin / Support', 'admin-flags': 'Admin / Feature flags', 'admin-audit': 'Admin / Audit log' };
   document.getElementById('breadcrumb').textContent = crumbMap[currentView] || currentView.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
@@ -402,12 +423,13 @@ function renderProvisioning() {
 function renderDashboard() {
   const paid = state.invoices.reduce((sum, invoice) => sum + invoice.paid, 0);
   const outstanding = state.invoices.reduce((sum, invoice) => sum + invoice.amount - invoice.paid, 0);
-  const dashboardCopy = { 'School owner': ['Good morning, Amara', 'Here is what is happening at  today.', 'Review money and school health'], Principal: ['Good morning, Miriam', 'Here is what needs your academic attention today.', 'Review attendance and approve results'], 'School admin': ['Good morning, Amara', 'Keep your school records moving with today\'s priorities.', 'Maintain records and setup'], Bursar: ['Good morning, Ngozi', 'Here is the latest view of collections and outstanding fees.', 'Follow up outstanding balances'], Teacher: ['Good morning, David', 'Your classes, registers and score deadlines are ready.', 'Mark a class and enter scores'], Parent: ['Welcome back', 'Here is the latest update for your children.', 'Check progress and fee status'], Student: ['Welcome back', 'Here is what is on your school day.', 'View your learning day'] }[state.currentUser.role] || ['Good morning, Amara', 'Here is what is happening at  today.', 'Review school health'];
+  const currentTime = timeContext();
+  const dashboardCopy = { 'School owner': [`${currentTime.greeting}, Amara`, 'Here is what is happening at your school today.', 'Review money and school health'], Principal: [`${currentTime.greeting}, Miriam`, 'Here is what needs your academic attention today.', 'Review attendance and approve results'], 'School admin': [`${currentTime.greeting}, Amara`, 'Keep your school records moving with today\'s priorities.', 'Maintain records and setup'], Bursar: [`${currentTime.greeting}, Ngozi`, 'Here is the latest view of collections and outstanding fees.', 'Follow up outstanding balances'], Teacher: [`${currentTime.greeting}, David`, 'Your classes, registers and score deadlines are ready.', 'Mark a class and enter scores'], Parent: ['Welcome back', 'Here is the latest update for your children.', 'Check progress and fee status'], Student: ['Welcome back', 'Here is what is on your school day.', 'View your learning day'] }[state.currentUser.role] || [`${currentTime.greeting}, Amara`, 'Here is what is happening at your school today.', 'Review school health'];
   const roleAction = { 'School owner': '<button class="button primary" data-view="finance">Review finances</button>', Principal: '<button class="button primary" data-view="results">Review results</button>', 'School admin': '<button class="button primary" data-view="students">Open student records</button>', Bursar: '<button class="button primary" data-view="finance">Open finance</button>', Teacher: '<button class="button primary" data-view="attendance">Mark attendance</button>', Parent: '<button class="button primary" data-view="report-cards">View latest result</button>', Student: '<button class="button primary" data-view="results">View results</button>' }[state.currentUser.role];
   const canCreateStudent = hasPermission('students.create');
   const addStudentAction = canCreateStudent ? '<button class="quick-action" data-action="add-student"><div class="quick-action-icon">＋</div><strong>Add a student</strong><span>New admission record</span></button>' : '';
   const rangeSegmented = segmentedMarkup('dash-range', [{label:'Week',value:'week'},{label:'Term',value:'term'},{label:'Year',value:'year'}], dashboardSegmented);
-  return `${pageHeading('Thursday, 17 September 2026', dashboardCopy[0], dashboardCopy[1], `${rangeSegmented}${roleAction}`.replace(/></g,'> <'))}
+  return `${pageHeading(currentTime.date, dashboardCopy[0], dashboardCopy[1], `${rangeSegmented}${roleAction}`.replace(/></g,'> <'))}
     <div class="stat-grid">
       <article class="stat-card"><div class="stat-top"><span>Active students</span><span class="stat-icon">♧</span></div><div class="stat-value">${state.students.length + 243}</div><div class="stat-foot"><span class="positive">↑ 8.4%</span> vs last term</div></article>
       <article class="stat-card"><div class="stat-top"><span>Attendance today</span><span class="stat-icon">◷</span></div><div class="stat-value">92.1%</div><div class="stat-foot"><span class="positive">↑ 2.3%</span> vs yesterday</div></article>
@@ -694,7 +716,7 @@ function closeCommandPalette() { document.getElementById('commandBackdrop').hidd
 function renderCommandResults(query) {
   const adminVisible = hasPermission('admin.access');
   const navigateActions = [
-    ['dashboard', 'Open overview', '⌂'], ['setup', 'Open setup', '✓'], ['students', 'Open students', '♧'], ['staff', 'Open staff', '♙'], ['academics', 'Open academics', '▤'], ['attendance', 'Mark attendance', '◷'], ['results', 'Enter results', '▦'], ['report-cards', 'Open report cards', '▧'], ['finance', 'Open finance', '₦'], ['communications', 'Open communications', '✦'], ['reports', 'Open reports', '◒'], ['ai', 'Open AI studio', '✧'], ['settings', 'Open settings', '⚙'],
+    ['dashboard', 'Open overview', '⌂'], ['setup', 'Open setup', '✓'], ['students', 'Open students', '♧'], ['staff', 'Open staff', '♙'], ['academics', 'Open academics', '▤'], ['attendance', 'Mark attendance', '◷'], ['results', 'Enter results', '▦'], ['report-cards', 'Open report cards', '▧'], ['reports', 'Open reports', '◒'], ['ai', 'Open AI studio', '✧'], ['settings', 'Open settings', '⚙'],
     ...(adminVisible ? [['admin-overview', 'Admin: overview', '⌁'], ['admin-schools', 'Admin: schools', '◫'], ['admin-billing', 'Admin: billing', '₦'], ['admin-support', 'Admin: support', '✦'], ['admin-flags', 'Admin: feature flags', '⚑'], ['admin-audit', 'Admin: audit log', '▤']] : [])
   ].map(([view, label, icon]) => ({ view, label, icon, detail: 'Navigate' }));
   const actions = [...navigateActions, ...state.students.slice(0, 5).map(student => ({ studentId: student.id, view: 'students', label: `${student.firstName} ${student.lastName}`, icon: '♧', detail: `${student.className} · ${student.admissionNo} · Open profile` }))];

@@ -24,7 +24,7 @@
     </section>
     <section class="form-side">
       <div class="form-card">
-        <div class="form-header"><span class="admin-mark">◆</span><p class="kicker">Admin account</p><h2>Create your account</h2><p>Use your details to start a local Edu-mit workspace.</p></div>
+        <div class="form-header"><span class="admin-mark">◆</span><p class="kicker">Admin account</p><h2>Create your account</h2><p>Use your details to create a school workspace.</p></div>
         <form id="adminSignupForm" novalidate>
           <div class="form-grid">
             <label>Full name<input name="name" autocomplete="name" placeholder="Amara Okafor" required></label>
@@ -33,14 +33,16 @@
             <label>Password<input name="password" type="password" autocomplete="new-password" placeholder="At least 8 characters" minlength="8" required></label>
             <label>Confirm password<input name="confirmPassword" type="password" autocomplete="new-password" placeholder="Repeat your password" minlength="8" required></label>
           </div>
-          <label class="terms"><input name="terms" type="checkbox" required><span>I agree to create a local demo workspace for this school.</span></label>
+          <label class="terms"><input name="terms" type="checkbox" required><span>I agree to create a school workspace for this school.</span></label>
           <p class="form-error" id="formError" role="alert"></p>
           <button class="submit-button" type="submit">Create Admin account <span>→</span></button>
         </form>
-        <p class="demo-note"><span>◌</span> This prototype stores account details only in this browser.</p>
+        <p class="demo-note"><span>◌</span> Your account is secured with Supabase Authentication.</p>
       </div>
     </section>
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-client.js"></script>
   <script src="tenant-store.js"></script>
   <script src="admin-signup.js"></script>
 </body>

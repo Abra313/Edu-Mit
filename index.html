@@ -4,18 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#1e1b4b" />
-    <title>Edu-mit | School workspace</title>
+    <title>EDU-MIT | School workspace</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="mobile.css" />
   </head>
   <body>
     <div class="app-shell">
       <aside class="sidebar" id="sidebar">
         <div class="brand-lockup">
           <div class="brand-mark"><img src="logo.svg" alt="Edu-mit logo" /></div>
-          <div><strong>Edu-mit</strong><span></span></div>
+          <div><strong>EDU-MIT</strong><span></span></div>
         </div>
         <div class="term-picker"><span>Current term</span><select id="termSwitcher" aria-label="Switch academic term"><option>2026/27 · Term 1</option><option>2026/27 · Term 2</option><option>2026/27 · Term 3</option></select></div>
         <nav class="nav-list" aria-label="Main navigation">
@@ -156,6 +157,6 @@
         </form>
       </aside>
     </div>
-    <script src="app.js"></script>
+    <script>window.location.replace('login.html');</script>
   </body>
 </html>

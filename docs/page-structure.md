@@ -1,6 +1,6 @@
 # Edu-mit page structure
 
-Edu-mit now has a standalone role-based front door alongside the original dependency-free single-page prototype. The role pages are intentionally independent so each role can grow without making the other dashboards carry unrelated markup or behavior.
+Edu-mit uses standalone role pages backed by Supabase Auth and database records. The role pages are intentionally independent so each role can grow without making the other dashboards carry unrelated markup or behavior.
 
 ## Role pages
 
@@ -12,17 +12,15 @@ Edu-mit now has a standalone role-based front door alongside the original depend
 | `teacher.html` | Teacher classes and results | `teacher.css` | `teacher.js` |
 | `student.html` | Student learning day | `student.css` | `student.js` |
 
-All role pages link back to `login.html` for sign out. They are local demo screens today; server-side authentication and authorization still need to replace the local navigation before production use.
+All role pages link back to `login.html` for sign out. `tenant-store.js` initializes the Supabase session and loads the role-scoped records used by each dashboard.
 
 The Admin dashboard uses clean query routes instead of hash anchors: `admin.html?page=overview`, `admin.html?page=students`, `admin.html?page=teachers`, `admin.html?page=academics`, `admin.html?page=attendance`, `admin.html?page=examinations`, `admin.html?page=finance`, `admin.html?page=library`, `admin.html?page=payroll`, `admin.html?page=reports`, `admin.html?page=ai`, and `admin.html?page=subscription`. Related sub-tools are grouped in the fixed Admin sidebar and use the same `page` query convention.
 
-School Settings persists to `edumit:school-settings:v1`; Subscription Plan persists to `edumit:subscription:v1`. Both pages reload when their local data changes in another browser tab.
+School Settings and Subscription Plan persist to the `school_settings`, `schools`, and `school_subscriptions` tables.
 
-## Local Admin authentication
+## Authentication
 
-The Admin flow stores the account in `scholara:admin-account:v1`, the profile in `scholara:admin-profile:v1`, and the active login in `scholara:admin-session:v1`. `admin.js` checks the session before showing the dashboard and reads the saved name, school and email to populate the Admin workspace.
-
-Teacher and Student use the same role-selection page without sign-up pages. The demo Teacher login is `david.eze@greenfield.edu` with password `teacher123`; Student login accepts the seeded admission numbers `GFA/2026/0147`, `GFA/2026/0148`, and `GFA/2026/0149`. Their sessions are stored in `scholara:teacher-session:v1` and `scholara:student-session:v1`.
+Supabase Auth manages passwords and short-lived sessions. The database trigger creates school profiles on signup; the Auth role in the profile determines the destination dashboard. Teachers and students must match an existing school record before account creation.
 
 ## Current runtime paths
 

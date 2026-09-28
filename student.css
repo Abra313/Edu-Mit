@@ -1,3 +1,7 @@
+@media(max-width:800px){.student-app>aside{display:none}.student-app>main{margin-left:0;width:100%}}
+body:not(.auth-ready) .student-app { visibility: hidden; }
+body:not(.auth-ready)::before { content: ''; position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; background: #f6f8f4; border: 4px solid #dce7df; border-top-color: #2a7657; border-radius: 50%; width: 34px; height: 34px; margin: auto; animation: route-spin .5s linear infinite; }
+@keyframes route-spin { to { transform: rotate(360deg); } }
  .brand img{display:block;width:42px;height:34px;object-fit:contain}.brand span{display:none}
 .student-app>aside{position:fixed;inset:0 auto 0 0;height:100vh;z-index:10;overflow-y:auto}.student-app>main{margin-left:235px;width:calc(100% - 235px)}@media(max-width:800px){.student-app>aside{width:64px}.student-app>main{margin-left:64px;width:calc(100% - 64px)}}
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');

@@ -244,3 +244,16 @@ input[type="checkbox"].row-check, th.checkbox-cell input { accent-color: var(--i
     pointer-events: auto;
   }
 }
+
+@media (max-width: 720px) {
+  .app-shell > .sidebar,
+  .sidebar-backdrop,
+  .mobile-menu {
+    display: none !important;
+  }
+
+  .app-shell > .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+}
